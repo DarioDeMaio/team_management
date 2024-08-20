@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block base_content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">User Details</h2>
+    <div class="card">
+        <div class="card-header">
+            User Information
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Name: {{ user['Name'] }}</h5>
+            <p class="card-text"><strong>Email:</strong> {{ user['Email'] }}</p>
+            <p class="card-text"><strong>Role:</strong> {{ user['Role'] }}</p>
+            <p class="card-text"><strong>Projects:</strong> 
+                {% if user['Projects'] %}
+                    {{ user['Projects'] | join(', ') }}
+                {% else %}
+                    No projects assigned
+                {% endif %}
+            </p>
+        </div>
+        <div class="card-footer text-muted">
+            <a href="{{ url_for('get_users') }}" class="btn btn-primary">Back to User List</a>
+            <a href="{{ url_for('edit_user', user_id=user['_id']) }}" class="btn btn-secondary">Edit</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

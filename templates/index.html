@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block base_content %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8 text-center">
+            <h1>Welcome to Team Project Management App</h1>
+            <p class="lead mt-3">
+                This application helps you manage team projects efficiently. 
+                You can create projects, assign tasks, track progress, 
+                add comments, and visualize deadlines in a calendar view. 
+                Manage your team with ease and ensure your projects are completed on time!
+            </p>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-4 text-center">
+            <a href="{{ url_for('get_users') }}" class="btn btn-success btn-lg w-100 mb-3">Get users</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
