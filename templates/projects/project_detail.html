@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block base_content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Project Details</h2>
+    <div class="card">
+        <div class="card-header">
+            Project Information
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Name: {{ project['Name'] }}</h5>
+            <p class="card-text"><strong>Description:</strong> {{ project['Description'] }}</p>
+            <p class="card-text"><strong>Members:</strong> 
+                {% if user_list %}
+                    {% for member in user_list %}
+                        {{ member.Name }}
+                    {% endfor %}
+                {% else %}
+                    No members assigned
+                {% endif %}
+            </p>
+        </div>
+        <div class="card-footer text-muted">
+            <a href="{{ url_for('projects_bp.get_projects') }}" class="btn btn-primary">Back to Project List</a>
+            <a href="{{ url_for('projects_bp.edit_project', project_id=project['_id']) }}" class="btn btn-secondary">Edit</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

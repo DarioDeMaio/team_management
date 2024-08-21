@@ -27,18 +27,24 @@ def add_user():
             'Projects': request.form.getlist('projects')
         }
         users.insert_one(new_user)
-        return redirect(url_for('users/users_bp.get_users'))
+        return redirect(url_for('users_bp.get_users'))
     all_projects = projects.find()
     return render_template("users/add_user.html", all_projects=all_projects)
 
 @users_bp.route("/user_details/<user_id>")
 def user_details(user_id):
     user = users.find_one({"_id": ObjectId(user_id)})
-    return render_template("users/user_details.html", user=user)
+    projects_list = []
+    for p in list(user['Projects']):
+        pr = projects.find_one({"_id":ObjectId(p)})
+        if pr:
+            projects_list.append(pr)
+    return render_template("users/user_details.html", user=user, projects_list=projects_list)
 
 @users_bp.route("/edit_user/<user_id>", methods=["GET", "POST"])
 def edit_user(user_id):
     user = users.find_one({"_id": ObjectId(user_id)})
+    
     if request.method == "POST":
         selected_projects = request.form.getlist('projects')
         updated_user = {
@@ -47,12 +53,25 @@ def edit_user(user_id):
             'Role': request.form['role'],
             'Projects': selected_projects
         }
+        
         users.update_one({"_id": ObjectId(user_id)}, {"$set": updated_user})
-        return redirect(url_for('users/users_bp.user_details', user_id=user_id))
-    all_projects = projects.find()
+        
+        for project_id in selected_projects:
+            project_id = ObjectId(project_id)
+            projects.update_one(
+                {"_id": project_id},
+                {"$addToSet": {'Members': ObjectId(user_id)}}
+            )
+        
+        user = users.find_one({"_id": ObjectId(user_id)})
+        all_projects = list(projects.find())
+        
+        return render_template("users/edit_user.html", user=user, all_projects=all_projects, message="User updated successfully!")
+    
+    all_projects = list(projects.find())
     return render_template("users/edit_user.html", user=user, all_projects=all_projects)
 
-@users_bp.route("/delete_user/<user_id>")
+@users_bp.route("/delete_user/<user_id>", methods=["POST"])
 def delete_user(user_id):
     users.delete_one({"_id": ObjectId(user_id)})
-    return redirect(url_for('users/users_bp.get_users'))
+    return redirect(url_for('users_bp.get_users'))
