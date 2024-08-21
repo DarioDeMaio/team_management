@@ -20,8 +20,8 @@
             </p>
         </div>
         <div class="card-footer text-muted">
-            <a href="{{ url_for('get_users') }}" class="btn btn-primary">Back to User List</a>
-            <a href="{{ url_for('edit_user', user_id=user['_id']) }}" class="btn btn-secondary">Edit</a>
+            <a href="{{ url_for('users_bp.get_users') }}" class="btn btn-primary">Back to User List</a>
+            <a href="{{ url_for('users_bp.edit_user', user_id=user['_id']) }}" class="btn btn-secondary">Edit</a>
         </div>
     </div>
 </div>

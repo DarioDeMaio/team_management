@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block base_content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Project List</h2>
+    <a href="{{ url_for('projects_bp.add_projects') }}" class="btn btn-primary mb-3">Add Project</a>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects_list %}
+                <tr class="clickable-row" data-href="{{ url_for('projects_bp.project_details', project_id=project['_id']) }}">
+                    <td>{{ project['Name'] }}</td>
+                    <td>{{ project['Description'] }}</td>
+                    <td>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var clickableRows = document.querySelectorAll(".clickable-row");
+    clickableRows.forEach(function(row) {
+        row.addEventListener("click", function() {
+            window.location.href = this.dataset.href;
+        });
+    });
+});
+</script>
+{% endblock %}
