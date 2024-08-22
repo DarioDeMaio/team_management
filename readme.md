@@ -11,7 +11,6 @@ This is a simple web application designed for managing team projects and tasks. 
 - **Task Assignment**: Create and assign tasks to specific team members within a project. Each task includes a description, status, due date, and assigned user.
 - **Task Comments**: Add, view, and manage comments on specific tasks for collaboration and updates.
 - **Project Progress**: Track the status of ongoing projects and view all related tasks.
-- **Calendar**: Visualize task deadlines and project timelines on a calendar.
 
 ## Database Structure
 
@@ -65,16 +64,9 @@ The application uses MongoDB to store data, organized into the following collect
 
 ## Usage
 
-1. **Register** as a new user or **log in** with an existing account.
-2. Create a new project and assign team members.
-3. Add tasks to the project and assign them to specific members.
-4. Track the progress of tasks and projects.
-5. Add comments to tasks for better communication.
-6. Use the calendar view to manage deadlines.
-
-## Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request with your improvements.
+1. Create a new project and assign team members.
+2. Add tasks to the project and assign them to specific members.
+3. Add comments to tasks for better communication.
 
 ## License
 
