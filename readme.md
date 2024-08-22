@@ -6,7 +6,7 @@ This is a simple web application designed for managing team projects and tasks. 
 
 ## Features
 
-- **User Management**: Register, login, and manage users with different roles (e.g., developer, project manager).
+- **User Management**: Create and manage users with different roles (e.g., developer, project manager).
 - **Project Management**: Create, update, and delete projects. Assign multiple users to a project.
 - **Task Assignment**: Create and assign tasks to specific team members within a project. Each task includes a description, status, due date, and assigned user.
 - **Task Comments**: Add, view, and manage comments on specific tasks for collaboration and updates.
@@ -24,18 +24,13 @@ The application uses MongoDB to store data, organized into the following collect
     - Stores project details including name, description, assigned members, and related tasks.
     
 3. **Tasks**
-    - Stores task details including name, description, status, assigned user, due date, and comments.
-
-4. **Comments**
-    - Stores comments related to specific tasks, including the user who made the comment and a timestamp.
+    - Stores task details including name, description, status, assigned user, date, and comments.
 
 ## Technologies Used
 
 - **Backend**: Flask (Python)
 - **Database**: MongoDB
-- **Frontend**: HTML, CSS, JavaScript (Optional: Use a frontend framework like React or Vue.js)
-- **Authentication**: Flask-Login (for user authentication and session management)
-- **Deployment**: (Optional) Docker, Heroku, or any other cloud service.
+- **Frontend**: HTML, CSS, JavaScript and Bootstrap.
 
 ## Installation and Setup
 

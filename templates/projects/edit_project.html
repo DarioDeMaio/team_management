@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block base_content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Edit Project</h2>
+    <form method="POST" action="{{ url_for('projects_bp.edit_project', project_id=project['_id']) }}">
+        <div class="mb-3">
+            <label for="name" class="form-label">Project Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ project['Name'] }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="4" required>{{ project['Description'] }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="members" class="form-label">Members</label>
+            <select multiple class="form-control" id="members" name="members">
+                {% for user in user_list %}
+                    <option value="{{ user['_id'] }}" 
+                        {% if user['_id'] in project['Members'] %} selected {% endif %}>
+                        {{ user['Name'] }}
+                    </option>
+                {% endfor %}
+            </select>
+            <small class="form-text text-muted">Hold down the Ctrl (Windows) / Command (Mac) button to select multiple options.</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+    <a href="{{ url_for('projects_bp.get_projects') }}" class="btn btn-secondary mt-3">Cancel</a>
+</div>
+{% endblock %}
