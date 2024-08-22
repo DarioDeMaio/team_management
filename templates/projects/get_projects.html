@@ -18,6 +18,11 @@
                     <td>{{ project['Name'] }}</td>
                     <td>{{ project['Description'] }}</td>
                     <td>
+                        <form method="POST" action="{{ url_for('projects_bp.delete_project', project_id=project['_id']) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this project?')">Delete</button>
+                        </form>
+                        <!-- Edit button -->
+                        <a href="{{ url_for('projects_bp.edit_project', project_id=project['_id']) }}" class="btn btn-secondary btn-sm">Edit</a>
                     </td>
                 </tr>
             {% endfor %}
