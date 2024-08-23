@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block base_content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Task Details</h1>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>{{ task.Name }}</h2>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Description:</h5>
+            <p class="card-text">{{ task.Description }}</p>
+            
+            <h5 class="card-title">Assigned User:</h5>
+            {% if user %}
+            <p class="card-text">{{ user.Name }}</p>
+            {% else %}
+            <p class="card-text text-muted">No user assigned</p>
+            {% endif %}
+            
+            <h5 class="card-title">Project:</h5>
+            {% if project %}
+            <p class="card-text">{{ project.Name }}</p>
+            {% else %}
+            <p class="card-text text-muted">No project assigned</p>
+            {% endif %}
+        </div>
+        <div class="card-footer text-end">
+            <a href="{{ url_for('tasks_bp.get_tasks') }}" class="btn btn-secondary">Back to Task List</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

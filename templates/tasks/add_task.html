@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block base_content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Add New Task</h1>
+    
+    <form action="{{ url_for('tasks_bp.add_task') }}" method="POST">
+        <div class="mb-3">
+            <label for="name" class="form-label">Task Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="user" class="form-label">Assign to User</label>
+            <select class="form-select" id="user" name="user" required>
+                {% for user in user_list %}
+                <option value="{{ user._id }}">{{ user.Name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="project" class="form-label">Assign to Project</label>
+            <select class="form-select" id="project" name="project" required>
+                {% for project in project_list %}
+                <option value="{{ project._id }}">{{ project.Name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Add Task</button>
+        <a href="{{ url_for('tasks_bp.get_tasks') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

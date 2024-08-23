@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block base_content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Edit Task</h1>
+
+    <form method="POST">
+        <div class="mb-3">
+            <label for="name" class="form-label">Task Name</label>
+            <input type="text" class="form-control" id="name" name="name" 
+                   value="{{ task.Name }}" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="description" class="form-label">Task Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required>{{ task.Description }}</textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Update Task</button>
+        <a href="{{ url_for('tasks_bp.get_tasks') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

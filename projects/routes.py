@@ -9,6 +9,7 @@ client = MongoClient(os.getenv("URL"))
 mongo = client['team_management']
 users = mongo['Users']
 projects = mongo['Projects']
+tasks = mongo['Tasks']
 
 @projects_bp.route("/get_projects")
 def get_projects():
