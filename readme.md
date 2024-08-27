@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a simple web application designed for managing team projects and tasks. The application allows users to create projects, assign tasks to team members, track project progress, add comments to specific tasks, and manage deadlines with a calendar view.
+This is a simple web application designed for managing team projects and tasks. The application allows users to create projects, assign tasks to team members and add comments to specific tasks.
 
 ## Features
 
@@ -10,7 +10,6 @@ This is a simple web application designed for managing team projects and tasks. 
 - **Project Management**: Create, update, and delete projects. Assign multiple users to a project.
 - **Task Assignment**: Create and assign tasks to specific team members within a project. Each task includes a description, status, due date, and assigned user.
 - **Task Comments**: Add, view, and manage comments on specific tasks for collaboration and updates.
-- **Project Progress**: Track the status of ongoing projects and view all related tasks.
 
 ## Database Structure
 
@@ -23,7 +22,7 @@ The application uses MongoDB to store data, organized into the following collect
     - Stores project details including name, description, assigned members, and related tasks.
     
 3. **Tasks**
-    - Stores task details including name, description, status, assigned user, date, and comments.
+    - Stores task details including name, description, status, assigned user, date, and comments(which include a date and content).
 
 ## Technologies Used
 
