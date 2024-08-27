@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 # Register the blueprints
 app.register_blueprint(users_bp, url_prefix='/users')

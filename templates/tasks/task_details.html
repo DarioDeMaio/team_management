@@ -25,6 +25,20 @@
             {% else %}
             <p class="card-text text-muted">No project assigned</p>
             {% endif %}
+
+            <h5 class="card-title mt-4">Comments:</h5>
+            {% if task.Comments %}
+            <ul class="list-group">
+                {% for comment in task.Comments %}
+                <li class="list-group-item">
+                    <strong>Date:</strong> {{ comment.date }}<br>
+                    <strong>Description:</strong> {{ comment.description }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">No comments available</p>
+            {% endif %}
         </div>
         <div class="card-footer text-end">
             <a href="{{ url_for('tasks_bp.get_tasks') }}" class="btn btn-secondary">Back to Task List</a>

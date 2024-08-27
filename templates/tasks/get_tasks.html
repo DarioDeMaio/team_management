@@ -14,7 +14,7 @@
         </thead>
         <tbody>
             {% for task in task_list %}
-            <tr>
+            <tr class="clickable-row" data-href="{{ url_for('tasks_bp.task_detail', task_id=task['_id']) }}">
                 <td>{{ task.Name }}</td>
                 <td>{{ task.Description }}</td>
                 <td>

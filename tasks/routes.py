@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from bson.objectid import ObjectId
 from pymongo import MongoClient
 import os
+import json
 
 tasks_bp = Blueprint('tasks_bp', __name__)
 
@@ -46,15 +47,24 @@ def task_detail(task_id):
 
 @tasks_bp.route("/task_edit/<task_id>", methods=["POST", "GET"])
 def task_edit(task_id):
-    task = tasks.find_one({"_id":ObjectId(task_id)})
+    task = tasks.find_one({"_id": ObjectId(task_id)})
+    
     if request.method == "POST":
-        
         new_task = {
             'Name': request.form['name'],
             'Description': request.form['description'],
         }
         
-        tasks.update_one({"_id":ObjectId(task_id)}, {"$set":new_task})
+        comments_json = request.form.get('comments-json')
+        if comments_json:
+            try:
+                comments = json.loads(comments_json)
+                if isinstance(comments, list):
+                    new_task['Comments'] = comments
+            except json.JSONDecodeError:
+                print("Error decoding JSON from comments-json")
+        
+        tasks.update_one({"_id": ObjectId(task_id)}, {"$set": new_task})
         return redirect(url_for('tasks_bp.get_tasks'))
     
     return render_template("tasks/edit_task.html", task=task)

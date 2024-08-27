@@ -4,7 +4,7 @@
 <div class="container mt-5">
     <h1 class="mb-4">Edit Task</h1>
 
-    <form method="POST">
+    <form method="POST" action="{{ url_for('tasks_bp.task_edit', task_id=task['_id']) }}">
         <div class="mb-3">
             <label for="name" class="form-label">Task Name</label>
             <input type="text" class="form-control" id="name" name="name" 
@@ -15,9 +15,89 @@
             <label for="description" class="form-label">Task Description</label>
             <textarea class="form-control" id="description" name="description" rows="3" required>{{ task.Description }}</textarea>
         </div>
-        
+
+        <div class="mb-3">
+            <label for="comments" class="form-label">Comments</label>
+            <div id="comments-container">
+                {% if task.Comments %}
+                    {% for comment in task.Comments %}
+                    <div class="comment mb-2">
+                        <p><strong>Date:</strong> {{ comment.date }}</p>
+                        <p><strong>Description:</strong> {{ comment.description }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No comments available</p>
+                {% endif %}
+            </div>
+            <!-- Hidden fields to store comments -->
+            <input type="hidden" id="comments-json" name="comments-json" value="{{ task.Comments|default([])|tojson }}">
+
+            <button type="button" class="btn btn-secondary" id="add-comment-btn">Add Comment</button>
+        </div>
+
         <button type="submit" class="btn btn-primary">Update Task</button>
         <a href="{{ url_for('tasks_bp.get_tasks') }}" class="btn btn-secondary">Cancel</a>
     </form>
+
+    <!-- Comment Modal -->
+    <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commentModalLabel">Add Comment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="comment-form">
+                        <div class="mb-3">
+                            <label for="comment-date" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="comment-date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comment-description" class="form-label">Description</label>
+                            <textarea class="form-control" id="comment-description" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Comment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var addCommentBtn = document.getElementById("add-comment-btn");
+    addCommentBtn.addEventListener("click", function() {
+        var commentModal = new bootstrap.Modal(document.getElementById('commentModal'));
+        commentModal.show();
+    });
+
+    var commentForm = document.getElementById("comment-form");
+    commentForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        var date = document.getElementById("comment-date").value;
+        var description = document.getElementById("comment-description").value;
+
+        // Add the new comment to the comments-container
+        var commentsContainer = document.getElementById("comments-container");
+        var newComment = document.createElement("div");
+        newComment.classList.add("comment", "mb-2");
+        newComment.innerHTML = `<p><strong>Date:</strong> ${date}</p><p><strong>Description:</strong> ${description}</p>`;
+        commentsContainer.appendChild(newComment);
+
+        // Add the new comment to the hidden input field
+        var commentsInput = document.getElementById("comments-json");
+        var existingComments = JSON.parse(commentsInput.value || '[]');
+        existingComments.push({ date: date, description: description });
+        commentsInput.value = JSON.stringify(existingComments);
+
+        // Hide the modal
+        var commentModal = bootstrap.Modal.getInstance(document.getElementById('commentModal'));
+        commentModal.hide();
+    });
+});
+</script>
 {% endblock %}
