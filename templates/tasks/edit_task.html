@@ -4,7 +4,7 @@
 <div class="container mt-5">
     <h1 class="mb-4">Edit Task</h1>
 
-    <form method="POST" action="{{ url_for('tasks_bp.task_edit', task_id=task['_id']) }}">
+    <form id="task-form">
         <div class="mb-3">
             <label for="name" class="form-label">Task Name</label>
             <input type="text" class="form-control" id="name" name="name" 
@@ -30,13 +30,10 @@
                     <p>No comments available</p>
                 {% endif %}
             </div>
-            <!-- Hidden fields to store comments -->
-            <input type="hidden" id="comments-json" name="comments-json" value="{{ task.Comments|default([])|tojson }}">
-
             <button type="button" class="btn btn-secondary" id="add-comment-btn">Add Comment</button>
         </div>
 
-        <button type="submit" class="btn btn-primary">Update Task</button>
+        <button type="button" class="btn btn-primary" id="submit-task-btn">Update Task</button>
         <a href="{{ url_for('tasks_bp.get_tasks') }}" class="btn btn-secondary">Cancel</a>
     </form>
 
@@ -69,34 +66,74 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    var addCommentBtn = document.getElementById("add-comment-btn");
-    addCommentBtn.addEventListener("click", function() {
-        var commentModal = new bootstrap.Modal(document.getElementById('commentModal'));
+    // Array per gestire i commenti
+    let comments = {{ task.Comments|default([])|tojson }};
+
+    // Gestione del pulsante "Add Comment"
+    document.getElementById("add-comment-btn").addEventListener("click", function() {
+        let commentModal = new bootstrap.Modal(document.getElementById('commentModal'));
         commentModal.show();
     });
 
-    var commentForm = document.getElementById("comment-form");
-    commentForm.addEventListener("submit", function(e) {
+    // Gestione del form per aggiungere un commento
+    document.getElementById("comment-form").addEventListener("submit", function(e) {
         e.preventDefault();
-        var date = document.getElementById("comment-date").value;
-        var description = document.getElementById("comment-description").value;
 
-        // Add the new comment to the comments-container
-        var commentsContainer = document.getElementById("comments-container");
-        var newComment = document.createElement("div");
+        // Recupera i dati dal modulo del commento
+        let date = document.getElementById("comment-date").value;
+        let description = document.getElementById("comment-description").value;
+
+        // Aggiungi il nuovo commento all'array
+        comments.push({ date: date, description: description });
+
+        // Aggiungi il nuovo commento al container dei commenti
+        let commentsContainer = document.getElementById("comments-container");
+        let newComment = document.createElement("div");
         newComment.classList.add("comment", "mb-2");
         newComment.innerHTML = `<p><strong>Date:</strong> ${date}</p><p><strong>Description:</strong> ${description}</p>`;
         commentsContainer.appendChild(newComment);
 
-        // Add the new comment to the hidden input field
-        var commentsInput = document.getElementById("comments-json");
-        var existingComments = JSON.parse(commentsInput.value || '[]');
-        existingComments.push({ date: date, description: description });
-        commentsInput.value = JSON.stringify(existingComments);
-
-        // Hide the modal
-        var commentModal = bootstrap.Modal.getInstance(document.getElementById('commentModal'));
+        // Chiudi il modal
+        let commentModal = bootstrap.Modal.getInstance(document.getElementById('commentModal'));
         commentModal.hide();
+
+        // Ripulisci il form del commento
+        document.getElementById("comment-date").value = '';
+        document.getElementById("comment-description").value = '';
+    });
+
+    // Gestione del pulsante "Update Task"
+    document.getElementById("submit-task-btn").addEventListener("click", function() {
+        // Recupera i dati del task
+        let name = document.getElementById("name").value;
+        let description = document.getElementById("description").value;
+
+        // Crea il payload da inviare al server
+        let payload = {
+            name: name,
+            description: description,
+            comments: comments
+        };
+
+        // Invia la richiesta al server
+        fetch("{{ url_for('tasks_bp.task_edit', task_id=task['_id']) }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => {
+            if (response.ok) {
+                // Redirige alla lista dei tasks se la richiesta ha successo
+                window.location.href = "{{ url_for('tasks_bp.get_tasks') }}";
+            } else {
+                console.error("Errore durante l'aggiornamento del task");
+            }
+        })
+        .catch(error => {
+            console.error("Errore nella richiesta:", error);
+        });
     });
 });
 </script>

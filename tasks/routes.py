@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, jsonify, render_template, request, redirect, url_for
 from bson.objectid import ObjectId
 from pymongo import MongoClient
 import os
@@ -50,25 +50,20 @@ def task_edit(task_id):
     task = tasks.find_one({"_id": ObjectId(task_id)})
     
     if request.method == "POST":
+        data = request.get_json()
+        print("Ricevuto JSON:", data)  # Debug per controllare i dati ricevuti
+
         new_task = {
-            'Name': request.form['name'],
-            'Description': request.form['description'],
+            'Name': data.get('name'),
+            'Description': data.get('description'),
+            'Comments': data.get('comments', [])
         }
         
-        comments_json = request.form.get('comments-json')
-        if comments_json:
-            try:
-                comments = json.loads(comments_json)
-                if isinstance(comments, list):
-                    new_task['Comments'] = comments
-            except json.JSONDecodeError:
-                print("Error decoding JSON from comments-json")
-        
+        # Aggiorna il task nel database
         tasks.update_one({"_id": ObjectId(task_id)}, {"$set": new_task})
-        return redirect(url_for('tasks_bp.get_tasks'))
+        return jsonify({"message": "Task updated successfully"}), 200
     
     return render_template("tasks/edit_task.html", task=task)
-
 @tasks_bp.route("/task/delete_task/<task_id>", methods=["POST"])
 def delete_task(task_id):
     tasks.delete_one({"_id":ObjectId(task_id)})
