@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a simple web application designed for managing team projects and tasks. The application allows users to create projects, assign tasks to team members and add comments to specific tasks.
+This is a simple web application designed for managing team projects and tasks using MongoDB and Flask. The application allows users to create projects, assign tasks to team members and add comments to specific tasks.
 
 ## Features
 
